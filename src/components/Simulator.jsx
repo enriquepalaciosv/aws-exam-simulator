@@ -27,6 +27,9 @@ const Simulator = ({ exam }) => {
     });
     setQuestions(evaluated);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep === questions.length - 1) {
+      setScore(true);
+    }
   };
 
   const handleBack = () => {
@@ -39,8 +42,6 @@ const Simulator = ({ exam }) => {
     );
     setQuestions(newQuestions);
   };
-
-  const showScore = () => setScore(true);
 
   if (score) {
     const correct = questions.filter((q) => q.evaluation);
@@ -78,7 +79,6 @@ const Simulator = ({ exam }) => {
           onSelection={handleChange}
           handleNext={handleNext}
         />
-        <Button onClick={showScore}>Finish</Button>
       </>
     );
   }
