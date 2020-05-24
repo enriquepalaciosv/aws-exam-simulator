@@ -7,6 +7,9 @@ import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles } from "@material-ui/core/styles";
 import MuiAlert from "@material-ui/lab/Alert";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles({
   root: {
@@ -27,6 +30,9 @@ const useStyles = makeStyles({
     cursor: "pointer",
   },
   info: {
+    width: "100%",
+  },
+  form: {
     width: "100%",
   },
 });
@@ -68,24 +74,25 @@ const Question = ({
         <Typography variant="h5" component="h2">
           {question.question}
         </Typography>
-
-        {question.answers.map((answer) => (
-          <Typography
-            variant="body1"
-            component="p"
-            key={answer.text}
-            className={classes.answer}
-            style={setStyle(answer)}
-          >
-            <Checkbox
-              disabled={resultsMode}
-              checked={answer.selected}
-              onChange={handleChange(answer)}
-              inputProps={{ "aria-label": "primary checkbox" }}
-            />
-            {answer.text}
-          </Typography>
-        ))}
+        <FormControl component="fieldset" className={classes.form}>
+          <FormGroup aria-label="position">
+            {question.answers.map((answer) => (
+              <FormControlLabel
+                style={setStyle(answer)}
+                value="end"
+                control={
+                  <Checkbox
+                    checked={answer.selected}
+                    onChange={handleChange(answer)}
+                    inputProps={{ "aria-label": "primary checkbox" }}
+                  />
+                }
+                label={answer.text}
+                labelPlacement="end"
+              />
+            ))}
+          </FormGroup>
+        </FormControl>
       </CardContent>
       <CardActions>
         {!resultsMode && (
