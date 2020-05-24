@@ -11,7 +11,13 @@ import { makeStyles } from "@material-ui/core/styles";
 const resetQuestions = (questions) => {
   return questions.map((q) => {
     const answers = q.answers.map((an) => ({ ...an, selected: false }));
-    return { ...q, answers };
+    let pick = 0;
+    q.answers.forEach((a) => {
+      if (a.correct) {
+        pick++;
+      }
+    });
+    return { ...q, answers, pick };
   });
 };
 

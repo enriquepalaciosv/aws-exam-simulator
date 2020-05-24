@@ -72,7 +72,7 @@ const Question = ({
           {`Question ${activeStep + 1} out of ${totalQuestions}`}
         </Typography>
         <Typography variant="h5" component="h2">
-          {question.question}
+          {`${question.question} (pick ${question.pick})`}
         </Typography>
         <FormControl component="fieldset" className={classes.form}>
           <FormGroup aria-label="position">
