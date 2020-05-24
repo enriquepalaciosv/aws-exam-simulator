@@ -3,14 +3,18 @@ import Stepper from "./Stepper";
 import Question from "./Question";
 import Typography from "@material-ui/core/Typography";
 
-const Simulator = ({ exam }) => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [score, setScore] = useState(false);
-  const formatted = exam.questions.map((q) => {
+const resetQuestions = (questions) => {
+  return questions.map((q) => {
     const answers = q.answers.map((an) => ({ ...an, selected: false }));
     return { ...q, answers };
   });
-  const [questions, setQuestions] = useState(formatted);
+};
+
+const Simulator = ({ exam }) => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [score, setScore] = useState(false);
+  const [questions, setQuestions] = useState(resetQuestions(exam.versions[0]));
+
   const handleNext = () => {
     const evaluated = questions.map((q, i) => {
       let isCorrect = true;

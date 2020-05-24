@@ -36,9 +36,9 @@ const ExamSelector = () => {
     const existing = levels.find((l) => l.title === title);
     if (existing) {
       const idx = levels.indexOf(existing);
-      levels[idx].versions++;
+      levels[idx].versions.push(questions);
     } else {
-      levels.push({ title, questions, totalQuestions, versions: 1 });
+      levels.push({ title, questions, totalQuestions, versions: [questions] });
     }
   });
 

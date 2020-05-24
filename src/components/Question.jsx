@@ -78,6 +78,7 @@ const Question = ({
           <FormGroup aria-label="position">
             {question.answers.map((answer) => (
               <FormControlLabel
+                key={answer.text}
                 style={setStyle(answer)}
                 value="end"
                 control={
