@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "1%",
   },
   versionSelector: {
-    marginLeft: "1%",
+    margin: theme.spacing(1),
+    minWidth: 120,
   },
 }));
 
@@ -98,13 +99,14 @@ const Simulator = ({ exam }) => {
           <Typography variant="h5" gutterBottom>
             {exam.title}
           </Typography>
-          <FormControl className={classes.versionSelector}>
+          <FormControl variant="outlined" className={classes.versionSelector}>
             <InputLabel id="demo-simple-select-label">Version</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={versionIndex}
               onChange={setAnotherExam}
+              label="Version"
             >
               {exam.versions.map((v, i) => (
                 <MenuItem key={i} value={i}>
