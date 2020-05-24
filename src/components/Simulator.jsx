@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import Stepper from "./Stepper";
 import Question from "./Question";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
 const Simulator = ({ exam }) => {
   const [activeStep, setActiveStep] = useState(0);
+  const [score, setScore] = useState(false);
   const formatted = exam.questions.map((q) => {
-    const noSelected = q.answers.map((an) => ({ ...an, selected: false }));
-    return { ...q, answers: noSelected };
+    const answers = q.answers.map((an) => ({ ...an, selected: false }));
+    return { ...q, answers };
   });
   const [questions, setQuestions] = useState(formatted);
   const handleNext = () => {
@@ -24,7 +27,6 @@ const Simulator = ({ exam }) => {
     });
     setQuestions(evaluated);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    console.log("evaluation", evaluated);
   };
 
   const handleBack = () => {
@@ -38,24 +40,48 @@ const Simulator = ({ exam }) => {
     setQuestions(newQuestions);
   };
 
-  return (
-    <>
-      <Stepper
-        totalQuestions={exam.totalQuestions}
-        activeStep={activeStep}
-        handleNext={handleNext}
-        handleBack={handleBack}
-      />
-      <Question
-        question={questions[activeStep].question}
-        answers={questions[activeStep].answers}
-        activeStep={activeStep}
-        totalQuestions={exam.totalQuestions}
-        onSelection={handleChange}
-        handleNext={handleNext}
-      />
-    </>
-  );
+  const showScore = () => setScore(true);
+
+  if (score) {
+    const correct = questions.filter((q) => q.evaluation);
+    const incorrect = questions.filter((q) => !q.evaluation);
+    const percent = Math.round((correct.length / exam.questions.length) * 100);
+    return (
+      <>
+        <Typography variant="h2" gutterBottom>
+          {`${percent}%`}
+        </Typography>
+        {incorrect.map((inc) => (
+          <Question
+            key={inc.question}
+            question={inc}
+            activeStep={inc.index}
+            totalQuestions={exam.totalQuestions}
+            resultsMode
+          />
+        ))}
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Stepper
+          totalQuestions={exam.totalQuestions}
+          activeStep={activeStep}
+          handleNext={handleNext}
+          handleBack={handleBack}
+        />
+        <Question
+          question={questions[activeStep]}
+          activeStep={activeStep}
+          totalQuestions={exam.totalQuestions}
+          onSelection={handleChange}
+          handleNext={handleNext}
+        />
+        <Button onClick={showScore}>Finish</Button>
+      </>
+    );
+  }
 };
 
 export default Simulator;

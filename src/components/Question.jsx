@@ -6,6 +6,11 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles } from "@material-ui/core/styles";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles({
   root: {
@@ -25,20 +30,23 @@ const useStyles = makeStyles({
     textAlign: "start",
     cursor: "pointer",
   },
+  info: {
+    width: "100%",
+  },
 });
 
 const Question = ({
   question,
-  answers,
   totalQuestions,
   activeStep,
   handleNext,
   onSelection,
+  resultsMode,
 }) => {
   const classes = useStyles();
 
   const handleChange = (answer) => (event) => {
-    const newAnswers = answers.map((a) =>
+    const newAnswers = question.answers.map((a) =>
       a.id === answer.id ? { ...a, selected: event.target.checked } : a
     );
     onSelection(newAnswers);
@@ -62,10 +70,10 @@ const Question = ({
           {`Question ${activeStep + 1} out of ${totalQuestions}`}
         </Typography>
         <Typography variant="h5" component="h2">
-          {question}
+          {question.question}
         </Typography>
 
-        {answers.map((answer) => (
+        {question.answers.map((answer) => (
           <Typography
             variant="body1"
             component="p"
@@ -74,6 +82,7 @@ const Question = ({
             style={setStyle(answer)}
           >
             <Checkbox
+              disabled={resultsMode}
               checked={answer.selected}
               onChange={handleChange(answer)}
               inputProps={{ "aria-label": "primary checkbox" }}
@@ -83,9 +92,16 @@ const Question = ({
         ))}
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={handleNext}>
-          Answer
-        </Button>
+        {!resultsMode && (
+          <Button size="small" onClick={handleNext}>
+            Answer
+          </Button>
+        )}
+        {resultsMode && (
+          <MuiAlert severity="info" className={classes.info}>
+            {question.explanation}
+          </MuiAlert>
+        )}
       </CardActions>
     </Card>
   );
