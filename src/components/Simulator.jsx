@@ -3,7 +3,6 @@ import Stepper from "./Stepper";
 import Question from "./Question";
 
 const Simulator = ({ exam }) => {
-  console.log("selected exam is", exam);
   const [activeStep, setActiveStep] = useState(0);
   const formatted = exam.questions.map((q) => {
     const noSelected = q.answers.map((an) => ({ ...an, selected: false }));
@@ -11,7 +10,21 @@ const Simulator = ({ exam }) => {
   });
   const [questions, setQuestions] = useState(formatted);
   const handleNext = () => {
+    const evaluated = questions.map((q, i) => {
+      let isCorrect = true;
+      const evAns = q.answers.map((ans) => {
+        if ((ans.selected && !ans.correct) || (ans.correct && !ans.selected)) {
+          isCorrect = false;
+        }
+        return { ...ans, evaluated: true };
+      });
+      return i === activeStep
+        ? { ...q, index: i, answers: evAns, evaluation: isCorrect }
+        : q;
+    });
+    setQuestions(evaluated);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    console.log("evaluation", evaluated);
   };
 
   const handleBack = () => {

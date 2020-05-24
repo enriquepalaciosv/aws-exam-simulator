@@ -44,6 +44,13 @@ const Question = ({
     onSelection(newAnswers);
   };
 
+  const setStyle = (answer) => {
+    if (answer.evaluated) {
+      return answer.correct ? { color: "green" } : { color: "red" };
+    }
+    return {};
+  };
+
   return (
     <Card className={classes.question}>
       <CardContent>
@@ -64,6 +71,7 @@ const Question = ({
             component="p"
             key={answer.text}
             className={classes.answer}
+            style={setStyle(answer)}
           >
             <Checkbox
               checked={answer.selected}
