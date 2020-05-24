@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Stepper from "./Stepper";
 import Question from "./Question";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 const Simulator = ({ exam }) => {
