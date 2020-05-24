@@ -1,0 +1,60 @@
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import * as exams from "../exams";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    cursor: "pointer",
+  },
+  card: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: 100,
+  },
+}));
+
+const ExamSelector = () => {
+  const classes = useStyles();
+  const levels = [];
+  exams.forEach((exam) => {
+    const { title, totalQuestions } = exam.data.createNewExamAttempt.exam;
+    const existing = levels.find((l) => l.title === title);
+    if (existing) {
+      const idx = levels.indexOf(existing);
+      levels[idx].versions++;
+    } else {
+      levels.push({ title, totalQuestions, versions: 1 });
+    }
+  });
+
+  return (
+    <div className={classes.root}>
+      <Typography variant="h5" gutterBottom>
+        Select an exam
+      </Typography>
+      <Grid container spacing={3}>
+        {levels.map((l) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={l.title}>
+            <Paper className={classes.paper}>
+              <Typography variant="h6" className={classes.card}>
+                <span>{l.title}</span>
+                <b>{`Questions: ${l.totalQuestions}`}</b>
+              </Typography>
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
+    </div>
+  );
+};
+
+export default ExamSelector;
